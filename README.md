@@ -7,8 +7,8 @@ This project provides a Python-based application for controlling multiple screen
 ## Features
 -Control multiple screens simultaneously.
 - Generate and display:
- - Laguerre-Gaussian holograms.
- - Hermite-Gaussian holograms.
+  - Laguerre-Gaussian holograms.
+  - Hermite-Gaussian holograms.
 - Gradients and random noise patterns.
 - Support for spatial light modulator (SLM) resolutions.
 
