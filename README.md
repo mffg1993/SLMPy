@@ -1,6 +1,6 @@
 # SLMPy - Multi-Screen SLM control with Hologram Generation
 
-This project provides a Python-based application for controlling multiple screens, supporting hologram generation and display. The tool is designed for scientific visualization, allowing users to generate and display Laguerre-Gaussian and Hermite-Gaussian holograms, random noise patterns, and gradients across multiple monitors. A version with a GUI  has also been added for the sake of simplicity
+This project provides a Python-based application for controlling multiple screens, supporting hologram generation and display. The tool is designed for scientific visualization, allowing users to generate and display Laguerre-Gaussian and Hermite-Gaussian holograms, random noise patterns, and gradients across multiple monitors. A version with a GUI  has also been added for the sake of simplicity.
 
 ---
 
