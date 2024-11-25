@@ -1,9 +1,36 @@
-# SLMPy
+# SLMPy - Multi-Screen SLM control with Hologram Generation
 
-Here, you will find multiple versions of the code I developed (with some refinements from ChatGPT) to control various Spatial Light modulators using Python to tailor the scalar complex amplitude of light. 
+This project provides a Python-based application for controlling multiple screens, supporting hologram generation and display. The tool is designed for scientific visualization, allowing users to generate and display Laguerre-Gaussian and Hermite-Gaussian holograms, random noise patterns, and gradients across multiple monitors. A version with a GUI  has also been added for the sake of simplicity
 
-The GUI version can detect the screens, and create masks for Hermite and Laguerre Gaussian modes. I expect the beam library to be expanded eventually. 
+---
 
+## Features
+-Control multiple screens simultaneously.
+- Generate and display:
+ - Laguerre-Gaussian holograms.
+ - Hermite-Gaussian holograms.
+- Gradients and random noise patterns.
+- Support for spatial light modulator (SLM) resolutions.
 
-To this point, the code is based only on the method developed by Prof. Ebrahim Karimi in the manuscript *Exact solution to simultaneous intensity and phase encryption with a single phase-only hologram* (https://opg.optica.org/ol/fulltext.cfm?uri=ol-38-18-3546&id=260924)
- 
+---
+
+## Requirements
+
+- Python 3.8 or later
+- NumPy
+- Matplotlib
+- PyQt5
+
+  ---
+
+## Versioning 
+
+- Current Version: 1.0.0:  Initial release with core features.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+## Acknowledgments
+Special thanks to the scientific and open-source communities for their support and resources
+
