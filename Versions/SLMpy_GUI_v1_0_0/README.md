@@ -38,29 +38,18 @@ python SLMpy_GUI_v1-0-0.py
 ## Usage
 
 1. **Launch the GUI**: Start the program and select a screen configuration.
-2. **Choose Content Type**: Assign different visual patterns to each available screen.
+2. **Choose Content Type**: Assign different visual patterns to each screen.
 3. **Adjust Parameters**: Modify settings such as beam waist, grating period, and mode indices.
 4. **Display on Screens**: Preview and apply the settings to the screens.
 
-## Parameters
+## Features
 
-### Laguerre-Gaussian Hologram
-- **l**: Azimuthal index (Orbital Angular Momentum)
-- **p**: Radial index
-- **w0**: Beam waist
-- **LA**: Grating period
-- **X, Y**: Beam displacement
-
-### Hermite-Gaussian Hologram
-- **m, n**: Orders in x and y directions
-- **w0**: Beam waist
-- **LA**: Grating period
-- **X, Y**: Beam displacement
-
-## Dependencies
-
-- `numpy` for numerical computations
-- `matplotlib` for visualization
-- `PyQt5` for GUI development
+- **Multi-Screen Control:** Capable of managing multiple screens. Autodetects the number of screens and their resolution.
+- **Basic beam shaping:** Contains the basic beams that I typically used, but I expect to add more eventually
+  - Laguerre-Gaussian Beams
+  - Hermite-Gaussian Beams
+  - Uniform zero-filled screen for alignment
+  - Gradient
+  - Random Noise
 
 
