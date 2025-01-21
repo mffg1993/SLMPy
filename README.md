@@ -25,7 +25,8 @@ This project provides a Python-based application for controlling multiple screen
 
 ## Versioning 
 
-- Current Version: 1.0.0:  Initial release with core features.
+- Current Version:
+  - 1.0.0:  Initial release with core features. GUI and Scripted are available. 
 
 ## License
 
