@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Jan 17 16:50:19 2025
-
 @author: mferrerg
 
 SLMpy_GUI/
@@ -17,7 +15,7 @@ SLMpy_GUI/
 
 import sys
 from PyQt5.QtWidgets import QApplication
-from gui import MultiScreenController
+from GUI import MultiScreenController
 
 def main():
     """
