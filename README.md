@@ -1,6 +1,6 @@
 # SLMPy - Multi-Screen SLM control with Hologram Generation
 
-![Python Version](https://img.shields.io/badge/python-3.11%2B-orange)
+![Python Version](https://img.shields.io/badge/python-3.8%2B-orange)
 ![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-Windows%20|%20Linux%20|%20Macos-lightgrey)
 ![Version](https://img.shields.io/badge/version-1.0.2-green)
