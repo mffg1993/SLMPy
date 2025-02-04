@@ -28,16 +28,25 @@ This project provides a Python-based application for controlling multiple screen
 - Matplotlib
 - PyQt5
 
-  ---
+---
 
 ## Versioning 
 
-- Current Version:
-  - 1.0.0:  Initial release with core features. GUI and Scripted are available. 
+ Current Version:
+
+- 1.0.2  - Now, it is possible to use the custom color maps. This helps in the efficiency of the SLM
+- 1.0.1  - The code was divided into files to improve readability and maintenance.
+- 1.0.0  - First release of the code. It was monolithic and a bit complicated to modify
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+
+### Key points:
+- You are free to use, modify, and distribute this software under the terms of the GPL-3.0 license.
+- Any derivative work must also be licensed under GPL-3.0.
+- This software comes with **no warranty**; see the [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.en.html) for more details.
+
 
 ## Acknowledgments
 Special thanks to the scientific and open-source communities for their support and resources
