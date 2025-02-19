@@ -11,7 +11,6 @@ Author: Manuel Ferrer (@mferrerg)
 
 import numpy as np
 import math
-from optics import cart2pol, LG, HG, Zernike, propTF
 
 def cart2pol(x, y):
     """
@@ -127,6 +126,69 @@ def LG(RHO, PHI, ell, p, w0):
         NlaguerreL(p, np.abs(ell), 2 * (RHO / w0) ** 2)
     )
     return field
+
+
+
+
+def NHermite(n, X):
+    """
+    Compute the numerical Hermite polynomial using recurrence relations.
+    
+    Parameters:
+        - n (int): Order of the Hermite polynomial.
+        - X (array-like): Input values for the polynomial.
+    
+    Returns:
+        - numpy.ndarray: Values of the Hermite polynomial.
+
+    """
+    # Initialize the first two Hermite polynomials
+    Hn1 = np.ones(X.shape)  # H_0(x) = 1
+    H = 2 * X  # H_1(x) = 2x
+
+    if n < 0:
+        raise ValueError("The index must be 0 or positive.")
+    elif n == 0:
+        return Hn1  # Return H_0(x)
+    elif n == 1:
+        return H  # Return H_1(x)
+    else:
+        # Use recurrence relation to compute higher-order polynomials
+        for nn in range(2, n + 1):
+            Hn = 2 * X * H - 2 * (nn - 1) * Hn1  # Recurrence relation: H_n(x) = 2xH_{n-1}(x) - 2(n-1)H_{n-2}(x)
+            Hn1 = H  # Update H_{n-2} to H_{n-1}
+            H = Hn  # Update H_{n-1} to H_n
+    return H
+
+def HG(X, Y, m, n, w0):
+    """
+     Generate a Hermite-Gaussian beam.
+    
+    Parameters:
+        - X, Y (2D arrays): Cartesian coordinates.
+        - m, n (int): Orders of the Hermite polynomial along x and y, respectively.
+        - w0 (float): Beam waist (radius at which the beam's intensity drops to 1/e^2).
+    
+    Returns:
+        - numpy.ndarray: Complex field of the Hermite-Gaussian beam.
+    """
+    # Compute the spacing between grid points
+    h = np.abs(X[0, 0] - X[0, 1])
+
+    # Calculate the Hermite-Gaussian field
+    field = (
+        NHermite(m, np.sqrt(2) * X / w0) *  # Hermite polynomial in X
+        NHermite(n, np.sqrt(2) * Y / w0) *  # Hermite polynomial in Y
+        np.exp(-(X ** 2 + Y ** 2) / w0 ** 2)  # Gaussian envelope
+    )
+    
+    # Normalize the field to ensure unit power
+    normalization = np.sum(h * h * np.abs(field) ** 2)
+    field = field / np.sqrt(normalization)
+    return field
+
+
+
 
 def propTF(u1, Lx, Ly, la, z):
     """
