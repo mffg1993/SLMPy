@@ -1,10 +1,24 @@
-# -*- coding: utf-8 -*-
 """
-Created on Wed Feb 19 16:40:35 2025
+Example Python Script for SLM Hologram Display
 
-@author: mferrerg
+This script demonstrates how to use a Spatial Light Modulator (SLM) to display Hermite-Gaussian (HG) and Laguerre-Gaussian (LG) holograms.
+It initializes an SLM screen manager, retrieves available screen resolutions, and manually computes holograms.
+The script also schedules automatic updates to swap displayed holograms after predefined time intervals using PyQt5's QTimer.
+
+Features:
+- Generates and displays HG and LG holograms using a custom SLM screen manager.
+- Supports manual hologram updates on different screens after a time delay.
+- Uses PyQt5 for GUI event loop management.
+- Ensures modularity and expandability for research applications in optics and physics.
+
+Requirements:
+- PyQt5 for GUI management.
+- Custom modules `SLMnew` and `holograms`.
+
+Author: Manuel Ferrer 
+Date: 19/02/2025
+License: GNU 3.0 
 """
-
 import sys
 import numpy as np
 from PyQt5.QtWidgets import QApplication
@@ -13,41 +27,51 @@ from holograms import HoloHG, HoloLG  # Import hologram functions
 from PyQt5.QtCore import QTimer
 
 
+# ==========================
+# QApplication Setup
+# ==========================
+
 # Ensure QApplication is created before any GUI elements
 app = QApplication.instance() or QApplication(sys.argv)
 
+# ==========================
+# SLM Hologram Setup
+# ==========================
 
-# Initialize the screen manager (NO FOR LOOP)
+# Initialize the screen manager
 screen_manager = ScreenManager()
-    
-# It request a dictionary with the resolutions of each available screen using the screen's index as key
-resolutions=screen_manager.get_screen_resolutions()
 
-# Compute holograms manually
-hg_hologram = HoloHG(m=3, n=2, w0=0.5, LA=0.001, SLM_Pix=resolutions[1])
-lg_hologram = HoloLG(l=2, p=1, w0=0.6, LA=0.0015, SLM_Pix=resolutions[1])
+# Retrieve available screen resolutions (using screen index as a key)
+resolutions = screen_manager.get_screen_resolutions()
 
-# Manually add screens
-screen_manager.add_screen(1, hg_hologram)
-#screen_manager.add_screen(2, lg_hologram)
+# Compute holograms manually with predefined parameters
+hg_hologram = HoloHG(m=3, n=2, w0=0.5, LA=0.001, SLM_Pix=resolutions[1])  # HG Mode
+lg_hologram = HoloLG(l=2, p=1, w0=0.6, LA=0.0015, SLM_Pix=resolutions[1])  # LG Mode
 
-# Example: Update screen 1 to a different HG hologram after 5 seconds
+# Manually add screens with holograms
+screen_manager.add_screen(1, hg_hologram)  # Display HG hologram on screen 1
+# screen_manager.add_screen(2, lg_hologram)  # Uncomment to display LG hologram on screen 2
 
-def update_screenapp(U): 
+# ==========================
+# Hologram Update Functionality
+# ==========================
+
+def update_screen(index,U):
+    """
+    Updates screen 1 with a new hologram.
+    Parameters:
+    - U: New hologram object to be displayed.
+    """
     print("Updating Screen 1...")
-    new_hg_hologram = U
-    screen_manager.update_screen(1,U)
+    screen_manager.update_screen(1, U)
 
+# Set timers for updating the screen with different holograms at specific intervals
+QTimer.singleShot(3000, lambda: update_screen(index,lg_hologram))  # Update to LG hologram after 3 seconds
+QTimer.singleShot(5000, lambda: update_screen(index,hg_hologram))  # Revert to HG hologram after 5 seconds
 
-def update_screen1(): 
-    print("Updating Screen 1...")
-    new_hg_hologram = HoloHG(m=5, n=3, w0=0.6, LA=0.02, SLM_Pix=(1024, 780))
-    screen_manager.update_screen(1, new_hg_hologram)
+# ==========================
+# Running the Application
+# ==========================
 
-timer = QTimer()
-timer.singleShot(3000, lambda: update_screenapp(lg_hologram))  # Update after 5 seconds
-
-timer.singleShot(5000, lambda: update_screenapp(hg_hologram))  # Update after 5 seconds
-
-# Run the QApplication event loop
+# Start the PyQt5 event loop to keep the application running
 sys.exit(app.exec_())
