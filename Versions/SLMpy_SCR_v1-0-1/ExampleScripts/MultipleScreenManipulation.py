@@ -22,7 +22,7 @@ License: GNU 3.0
 import sys
 import numpy as np
 from PyQt5.QtWidgets import QApplication
-from SLMnew import ScreenManager
+from slm import ScreenManager
 from holograms import HoloHG, HoloLG  # Import hologram functions
 from PyQt5.QtCore import QTimer
 
