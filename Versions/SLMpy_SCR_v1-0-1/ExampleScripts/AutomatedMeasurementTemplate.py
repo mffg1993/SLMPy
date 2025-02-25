@@ -14,7 +14,7 @@ Features:
 Requirements:
 - PyQt5 for GUI management.
 - pylablib for interfacing with Thorlabs devices.
-- Custom modules `SLMnew` and `holograms`.
+- Custom modules `slm` and `holograms`.
 
 Author: Manuel Ferrer 
 Date: 25/02/2025
@@ -26,7 +26,7 @@ import numpy as np
 import time
 import threading
 from PyQt5.QtWidgets import QApplication
-from SLMnew import ScreenManager
+from slm import ScreenManager
 from holograms import HoloHG  # Import hologram function
 from pylablib.devices import Thorlabs
 
