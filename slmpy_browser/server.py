@@ -150,7 +150,7 @@ def display(request: DisplayRequest):
         if request.screen >= len(screens):
             raise ValueError("Selected screen is no longer available.")
         target = screens[request.screen]
-        s = request.settings()
+        s = PatternRequest(**request.model_dump(exclude={"screen"})).settings()
         if (s.width, s.height) != (target["width"], target["height"]):
             raise ValueError(
                 "Use the native resolution for screen %d: %dx%d." %
