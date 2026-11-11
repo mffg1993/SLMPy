@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "slmpy-lab-browser"
+version = "0.1.0"
+description = "Local browser control interface for experimental phase SLMs"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.26",
+  "Pillow>=10",
+  "fastapi>=0.110",
+  "uvicorn>=0.27",
+  "pydantic>=2",
+]
+
+[project.optional-dependencies]
+display = ["PySide6>=6.6"]
+gpu-cuda12 = ["cupy-cuda12x>=13"]
+gpu-cuda13 = ["cupy-cuda13x>=13"]
+test = ["pytest>=8", "httpx>=0.27"]
+
+[project.scripts]
+slmpy-browser = "slmpy_browser.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["slmpy_browser*"]
+
+[tool.setuptools.package-data]
+slmpy_browser = ["static/*.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
