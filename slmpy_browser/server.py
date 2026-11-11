@@ -102,7 +102,7 @@ async def local_host_only(request: Request, call_next):
     if host not in ("127.0.0.1", "localhost"):
         return JSONResponse(status_code=403, content={"detail": "Local access only."})
     origin = request.headers.get("origin")
-    if origin and origin.rstrip("/") not in ("http://127.0.0.1:8765", "http://localhost:8765"):
+    if origin and origin.rstrip("/") not in ("http://127.0.0.1:%s" % request.url.port, "http://localhost:%s" % request.url.port):
         return JSONResponse(status_code=403, content={"detail": "Untrusted origin."})
     return await call_next(request)
 
