@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SLMPy Browser</title>
+<style>
+:root{color-scheme:dark;--bg:#0e151e;--panel:#192534;--line:#34465b;--fg:#f1f6fc;--muted:#a4b7c9;--accent:#65c5ed}
+*{box-sizing:border-box}body{background:var(--bg);color:var(--fg);font:14px/1.5 system-ui;margin:0}header{padding:18px 28px;border-bottom:1px solid var(--line);font-size:20px;font-weight:700}header small{display:block;color:var(--muted);font-size:12px;font-weight:400}main{max-width:1400px;margin:auto;padding:24px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}button{color:var(--fg);background:var(--panel);border:1px solid var(--line);padding:10px 14px;border-radius:8px;cursor:pointer}button:hover,button.active{border-color:var(--accent)}button.primary{background:#176d98;border-color:#176d98}.grid{display:grid;grid-template-columns:minmax(300px,350px) minmax(0,1fr);gap:18px}.card{background:var(--panel);border:1px solid var(--line);padding:20px;border-radius:12px;min-width:0}h2{font-size:17px;margin:0 0 12px}h3{font-size:13px;margin:15px 0 7px}label{display:block;font-size:12px;color:var(--muted);margin:12px 0 4px}input,select{width:100%;color:var(--fg);background:var(--bg);border:1px solid var(--line);padding:9px;border-radius:6px}.two,.preview{display:grid;grid-template-columns:1fr 1fr;gap:12px}.preview img{max-width:100%;height:auto;image-rendering:pixelated;background:black;min-height:180px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.muted,p{color:var(--muted)}.warn{border-left:3px solid #d8a75c;padding:12px;background:#302819;color:#eadabb}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:15px 0}.stat{background:var(--bg);padding:16px;border-radius:8px}.stat b{display:block;font-size:19px}.small{font-size:12px}#notice{min-height:25px;color:#78e4b9;margin:10px 0;white-space:pre-wrap}#notice.error{color:#ff9e9e}[hidden]{display:none!important}@media(max-width:840px){.grid,.preview,.stats{grid-template-columns:1fr}main{padding:12px}}
+</style></head><body>
+<header>SLMPy <small>Local hologram studio · browser control</small></header>
+<main>
+<nav class="tabs"><button data-tab="studio" class="active">Hologram Studio</button><button data-tab="screens">Displays & Screens</button><button data-tab="gpu">GPU Acceleration</button></nav>
+<div id="notice" role="status"></div>
+<section id="studio" class="tab"><div class="grid">
+<div class="card"><h2>Pattern generator</h2>
+<label for="mode">Pattern</label><select id="mode"><option>LG</option><option>HG</option><option value="grating">Blazed grating</option></select>
+<div class="two"><div><label for="width">Width (pixels)</label><input id="width" type="number" value="1024"></div><div><label for="height">Height (pixels)</label><input id="height" type="number" value="768"></div></div>
+<div class="two" id="lg-fields"><div><label for="l">LG index ℓ</label><input id="l" type="number" value="1"></div><div><label for="p">LG index p</label><input id="p" type="number" value="0"></div></div>
+<div class="two" id="hg-fields" hidden><div><label for="m">HG index m</label><input id="m" type="number" value="0"></div><div><label for="n">HG index n</label><input id="n" type="number" value="0"></div></div>
+<label for="waist">Normalized beam waist</label><input id="waist" type="number" value=".35" step=".05">
+<label for="period_px">Grating period (pixels)</label><input id="period_px" type="number" value="32" step="1">
+<div class="two"><div><label for="offset_x">Horizontal offset</label><input id="offset_x" type="number" value="0" step=".05"></div><div><label for="offset_y">Vertical offset</label><input id="offset_y" type="number" value="0" step=".05"></div></div>
+<label for="backend">Computation</label><select id="backend"><option value="auto">Auto (GPU if available)</option><option value="cpu">CPU · NumPy</option><option value="gpu">GPU · CuPy</option></select>
+<div class="actions"><button class="primary" id="generate">Generate preview</button></div></div>
+<div class="card"><h2>Optical previews</h2><p class="small">Browser preview may be downsampled; physical output receives full resolution.</p>
+<div class="preview"><div><h3>Phase mask · 8-bit</h3><img id="phase" alt="Generated phase preview"></div><div><h3>Far-field · FFT estimate</h3><img id="fft" alt="Fourier intensity preview"></div></div>
+<p id="timing">No pattern yet.</p><div class="warn">Uncalibrated phase-only prototype. A device-specific phase LUT, amplitude hologram encoding, scaling verification and synchronization are not yet validated.</div>
+</div></div></section>
+<section id="screens" class="tab" hidden><div class="grid"><div class="card"><h2>Connected monitors</h2><p id="screen-status">Checking…</p><label for="screen">Monitor</label><select id="screen"></select><div class="actions"><button id="refresh">Refresh</button><button id="native">Use native resolution</button></div></div>
+<div class="card"><h2>Native screen output</h2><p>Use a normal monitor first. Separate Qt processes handle independent screens. Press Escape on the output window to close it.</p><div class="actions"><button id="show" class="primary">Display pattern</button><button id="close">Close selected screen</button></div><p id="active"></p><div class="warn">For optical work, verify 1:1 device pixels, operating-system scaling, color management, and phase calibration before use.</div></div></div></section>
+<section id="gpu" class="tab" hidden><div class="card"><h2>GPU Acceleration</h2><p>NumPy runs on the CPU. CuPy optionally accelerates hologram computation and FFT on a compatible NVIDIA CUDA GPU; it does not accelerate physical refresh rate.</p>
+<div class="stats"><div class="stat">CUDA available<b id="available">Checking</b></div><div class="stat">Device<b id="device">—</b></div><div class="stat">GPU memory<b id="memory">—</b></div></div><p id="gpu-note" class="small"></p>
+<div class="two" style="max-width:440px"><div><label for="bw">Benchmark width</label><input type="number" id="bw" value="1024"></div><div><label for="bh">Benchmark height</label><input type="number" id="bh" value="768"></div></div><div class="actions"><button class="primary" id="benchmark">Run CPU/GPU benchmark</button></div>
+<div class="stats"><div class="stat">CPU median<b id="cpu">—</b></div><div class="stat">GPU median<b id="gpu-ms">—</b></div><div class="stat">GPU speedup<b id="speedup">—</b></div></div>
+<p id="bench-note" class="small">Warm median of hologram generation + FFT; excludes transfer and screen refresh.</p></div></section>
+</main>
+<script>
+const E=id=>document.getElementById(id);
+const fields=["width","height","l","p","m","n","waist","period_px","offset_x","offset_y"];
+const config=()=>Object.assign({mode:E("mode").value,backend:E("backend").value},Object.fromEntries(fields.map(k=>[k,Number(E(k).value)])));
+function notice(s,bad=false){E("notice").textContent=s;E("notice").className=bad?"error":"";}
+async function api(name,body){const r=await fetch("/api/"+name,{method:body?"POST":"GET",headers:body?{"Content-Type":"application/json"}:{},body:body?JSON.stringify(body):undefined});const x=await r.json();if(!r.ok)throw new Error(typeof x.detail==="string"?x.detail:JSON.stringify(x.detail));return x;}
+async function action(fn){try{notice("Processing…");await fn();}catch(e){notice(e.message,true);}}
+document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".tab").forEach(x=>x.hidden=x.id!==b.dataset.tab);});
+E("mode").onchange=()=>{E("lg-fields").hidden=E("mode").value!=="LG";E("hg-fields").hidden=E("mode").value!=="HG";};
+E("generate").onclick=()=>action(async()=>{const r=await api("preview",config());E("phase").src=r.preview;E("fft").src=r.fft_preview||"";E("timing").textContent=r.backend+" compute: "+r.compute_ms+" ms, transfer: "+r.transfer_ms+" ms, "+r.dimensions.join(" × ")+" px";notice("Preview ready.");});
+async function refresh(){const r=await api("status");const prev=E("screen").value;E("screen").replaceChildren();r.screens.forEach(s=>{const o=document.createElement("option");o.value=s.index;o.textContent="Screen "+s.index+": "+s.name+" ("+s.width+"×"+s.height+", DPR "+s.device_pixel_ratio+")";E("screen").add(o);});if([...E("screen").options].some(x=>x.value===prev))E("screen").value=prev;
+E("screen-status").textContent=r.screen_error||r.screens.length+" monitor(s) found";
+E("active").textContent="Active native outputs: "+(r.active_screens.join(", ")||"none");
+E("available").textContent=r.gpu.available?"Yes":"No";E("device").textContent=r.gpu.device||"CPU only";E("memory").textContent=r.gpu.available?r.gpu.memory_gb+" GB":"—";E("gpu-note").textContent=r.gpu.available?"CuPy "+r.gpu.cupy+", "+r.gpu.devices+" device(s)":r.gpu.reason;return r;}
+E("refresh").onclick=()=>action(async()=>{await refresh();notice("Refreshed.");});
+E("native").onclick=()=>action(async()=>{const r=await refresh(),s=r.screens.find(x=>String(x.index)===E("screen").value);if(!s)throw new Error("No screen selected.");E("width").value=s.width;E("height").value=s.height;notice("Using native "+s.width+"×"+s.height);});
+E("show").onclick=()=>action(async()=>{if(!confirm("Display uncalibrated grayscale pattern on selected monitor?"))return notice("Cancelled.");const r=await api("display",Object.assign(config(),{screen:Number(E("screen").value)}));await refresh();notice("Pattern sent to screen "+r.screen+" using "+r.backend);});
+E("close").onclick=()=>action(async()=>{await api("close",{screen:Number(E("screen").value)});await refresh();notice("Output closed.");});
+E("benchmark").onclick=()=>action(async()=>{const r=await api("benchmark",{width:Number(E("bw").value),height:Number(E("bh").value),repetitions:5});E("cpu").textContent=r.cpu==null?"—":r.cpu+" ms";E("gpu-ms").textContent=r.gpu==null?"—":r.gpu+" ms";E("speedup").textContent=r.speedup?r.speedup+"×":"—";E("bench-note").textContent=r.measurement+(r.gpu_note?" · "+r.gpu_note:"");notice("Benchmark finished.");});
+refresh().catch(e=>notice(e.message,true));
+</script></body></html>
