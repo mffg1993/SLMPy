@@ -54,7 +54,7 @@ def test_cpu_benchmark():
 
 
 def test_preview_endpoint():
-    with TestClient(app) as client:
+    with TestClient(app, base_url="http://127.0.0.1:8765") as client:
         r = client.post("/api/preview", json={"width": 128, "height": 96, "backend": "cpu"})
         assert r.status_code == 200, r.text
         assert r.json()["backend"] == "cpu"
@@ -63,7 +63,7 @@ def test_preview_endpoint():
 
 
 def test_home_endpoint():
-    with TestClient(app) as client:
+    with TestClient(app, base_url="http://127.0.0.1:8765") as client:
         r = client.get("/")
         assert r.status_code == 200
         assert "GPU Acceleration" in r.text
